@@ -1,0 +1,26 @@
+target/
+*.pyc
+
+# idea
+*.i??
+.idea/
+out/
+classes/
+*.log
+
+# eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# gradle
+.gradle
+build/
+
+# vim swap files
+*.swp
+
+# OS X
+.DS_Store
+
