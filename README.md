@@ -63,8 +63,12 @@ By default, `MesosToSchedulerDriverAdapter` uses `V0` version of API (non-HTTP).
 
 To use `V1` version of API, you just need to start your framework with `MESOS_API_VERSION` environment variable set to `V1`. For ex:
 
-`export MESOS_API_VERSION=V1`
+```export MESOS_API_VERSION=V1```
 
 If for some reason you ever want to go back to `V0` version while already running framework with version `V1` of API, you just need to restart your framework with either `MESOS_API_VERSION` environment variable set to `V0` OR by unsetting `MESOS_API_VERSION` (which automatically default to `V0`). For ex:
 
-`export MESOS_API_VERSION=V0` OR `unset MESOS_API_VERSION`
+```export MESOS_API_VERSION=V0``` 
+
+OR 
+
+```unset MESOS_API_VERSION```
