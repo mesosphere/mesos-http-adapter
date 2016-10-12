@@ -140,3 +140,5 @@ distributions {
     baseName = 'http-api-shim'
   }
 }
+
+apply from: 'publish.gradle'

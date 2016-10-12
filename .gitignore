@@ -24,3 +24,6 @@ build/
 # OS X
 .DS_Store
 
+# Gradle Properties
+# Don't make this commitable as this contains creds for publishing to Maven Central
+gradle.properties
