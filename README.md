@@ -1,7 +1,7 @@
 # Mesos HTTP API Adapter
 
 ## Goal
-The goal of this project is to enable existing Mesos frameworks to try out the Mesos `V1` HTTP API using the existing `SchedulerDriver` interface.
+The goal of this project is to enable existing Mesos frameworks to try out the Mesos `V1` [HTTP API](http://mesos.apache.org/documentation/latest/scheduler-http-api/) using the existing `SchedulerDriver` interface.
 
 ## Intent
 This project's intent is to help migrate existing Mesos frameworks to the HTTP API, and not become the de-facto way of using HTTP API.
