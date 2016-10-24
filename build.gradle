@@ -137,7 +137,7 @@ dependencies {
 distributions {
   main {
     mainClassName = ''
-    baseName = 'http-api-shim'
+    baseName = 'mesos-http-adapter'
   }
 }
 
