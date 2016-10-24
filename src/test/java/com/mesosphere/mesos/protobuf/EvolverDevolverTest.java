@@ -1,4 +1,4 @@
-package org.apache.mesos.protobuf;
+package com.mesosphere.mesos.protobuf;
 
 import org.apache.mesos.v1.Protos;
 import org.junit.Test;
