@@ -1,4 +1,4 @@
-package org.apache.mesos.scheduler;
+package com.mesosphere.mesos.HTTPAdapter;
 
 import com.google.protobuf.ByteString;
 import org.apache.mesos.Protos.FrameworkInfo;

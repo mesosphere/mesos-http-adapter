@@ -1,9 +1,9 @@
-package org.apache.mesos.scheduler;
+package com.mesosphere.mesos.HTTPAdapter;
 
 import com.google.api.client.util.ExponentialBackOff;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.ByteString;
-import org.apache.mesos.protobuf.EvolverDevolver;
+import com.mesosphere.mesos.protobuf.EvolverDevolver;
 import org.apache.mesos.v1.scheduler.Mesos;
 import org.apache.mesos.v1.scheduler.Protos;
 import org.apache.mesos.v1.scheduler.V0Mesos;
