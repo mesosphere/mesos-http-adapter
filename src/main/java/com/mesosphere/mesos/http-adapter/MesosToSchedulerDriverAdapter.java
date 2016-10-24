@@ -54,6 +54,7 @@ public class MesosToSchedulerDriverAdapter implements
     // TODO(anand): This can change to `v1.Status` once we add support for devolving enums.
     private org.apache.mesos.Protos.Status status;
     private boolean registered;
+    private final boolean implicitAcknowledgements;
     private Mesos mesos;
     private volatile ScheduledExecutorService subscriberTimer;
     private State state;
@@ -63,12 +64,14 @@ public class MesosToSchedulerDriverAdapter implements
 
     public MesosToSchedulerDriverAdapter(org.apache.mesos.Scheduler wrappedScheduler,
                                          org.apache.mesos.Protos.FrameworkInfo frameworkInfo,
-                                         String master) {
+                                         String master,
+                                         boolean implicitAcknowledgements) {
         this.wrappedScheduler = wrappedScheduler;
         this.frameworkInfo = EvolverDevolver.evolve(frameworkInfo);
         this.credential = null;
         this.master = master;
         this.registered = false;
+        this.implicitAcknowledgements = implicitAcknowledgements;
         this.status = org.apache.mesos.Protos.Status.DRIVER_NOT_STARTED;
         this.state = State.DISCONNECTED;
     }
@@ -76,12 +79,14 @@ public class MesosToSchedulerDriverAdapter implements
     public MesosToSchedulerDriverAdapter(org.apache.mesos.Scheduler wrappedScheduler,
                                          org.apache.mesos.Protos.FrameworkInfo frameworkInfo,
                                          String master,
+                                         boolean implicitAcknowledgements,
                                          org.apache.mesos.Protos.Credential credential) {
         this.wrappedScheduler = wrappedScheduler;
         this.frameworkInfo = EvolverDevolver.evolve(frameworkInfo);
         this.master = master;
         this.credential = EvolverDevolver.evolve(credential);
         this.registered = false;
+        this.implicitAcknowledgements = implicitAcknowledgements;
         this.status = org.apache.mesos.Protos.Status.DRIVER_NOT_STARTED;
         this.state = State.DISCONNECTED;
     }
@@ -218,8 +223,11 @@ public class MesosToSchedulerDriverAdapter implements
 
                 wrappedScheduler.statusUpdate(this, event.getUpdate().getStatus());
 
-                // Send ACK only when UUID is set.
-                if (v1Status.hasUuid()) {
+                // The underlying implementations do not automatically
+                // send acknowledgements. IFF we have
+                // 'implicitAcknowledgements' turned on, AND a UUID is
+                // set then we send an ACK.
+                if (implicitAcknowledgements && v1Status.hasUuid()) {
                     final org.apache.mesos.v1.Protos.AgentID agentId = v1Status.getAgentId();
                     final org.apache.mesos.v1.Protos.TaskID taskId = v1Status.getTaskId();
 

@@ -713,13 +713,13 @@ public class MesosToSchedulerDriverAdapterTest {
         private final ScheduledExecutorService timer;
 
         CustomMesosToSchedulerDriverAdapter(Scheduler scheduler, Mesos mesos) {
-            super(scheduler, FRAMEWORK_INFO, "master");
+            super(scheduler, FRAMEWORK_INFO, "master", true);
             this.mesos = mesos;
             this.timer = Executors.newSingleThreadScheduledExecutor();
         }
 
         CustomMesosToSchedulerDriverAdapter(Scheduler scheduler, Mesos mesos, ScheduledExecutorService timer) {
-            super(scheduler, FRAMEWORK_INFO, "master");
+            super(scheduler, FRAMEWORK_INFO, "master", true);
             this.mesos = mesos;
             this.timer = timer;
         }
