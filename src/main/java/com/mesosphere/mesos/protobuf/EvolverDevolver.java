@@ -1,4 +1,4 @@
-package org.apache.mesos.protobuf;
+package com.mesosphere.mesos.protobuf;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
