@@ -477,22 +477,34 @@ public class MesosToSchedulerDriverAdapterTest {
         assertEquals(org.apache.mesos.Protos.Status.DRIVER_STOPPED, driver.stop(true));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testJoin() {
         Scheduler scheduler = mock(Scheduler.class);
         Mesos mesos = mock(Mesos.class);
 
         CustomMesosToSchedulerDriverAdapter driver = new CustomMesosToSchedulerDriverAdapter(scheduler, mesos);
-        driver.join();
+        assertEquals(org.apache.mesos.Protos.Status.DRIVER_RUNNING, driver.start());
+
+        Runnable stop = () -> { driver.stop(); };
+        stop.run();
+
+        // The `join()` should return immediately since the driver is stopped in another thread.
+        assertEquals(org.apache.mesos.Protos.Status.DRIVER_STOPPED, driver.join());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void testRun() {
         Scheduler scheduler = mock(Scheduler.class);
         Mesos mesos = mock(Mesos.class);
 
         CustomMesosToSchedulerDriverAdapter driver = new CustomMesosToSchedulerDriverAdapter(scheduler, mesos);
-        driver.run();
+        assertEquals(org.apache.mesos.Protos.Status.DRIVER_RUNNING, driver.start());
+
+        Runnable abort = () -> { driver.abort(); };
+        abort.run();
+
+        // The `run()` should return immediately since the driver is aborted in another thread.
+        assertEquals(org.apache.mesos.Protos.Status.DRIVER_ABORTED, driver.run());
     }
 
     @Test
