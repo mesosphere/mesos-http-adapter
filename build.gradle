@@ -87,7 +87,7 @@ ext {
   protobufJava = "2.6.1"
 }
 
-group = "mesosphere"
+group = "com.mesosphere"
 version = "0.3.0-SNAPSHOT"
 
 task sourceJar(type: Jar) {
