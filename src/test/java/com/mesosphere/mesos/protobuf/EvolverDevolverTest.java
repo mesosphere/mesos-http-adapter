@@ -9,9 +9,12 @@ import static org.junit.Assert.assertEquals;
 public class EvolverDevolverTest {
     private final static String user = "test-user";
     private final static String name = "test-framework";
+    private final static String hostname = "test-hostname";
     private final static String id = "test-id";
     private final static String principal = "test-principal";
     private final static String secret = "test-secret";
+    private final static int ip = 123;
+    private final static int port = 5050;
 
     @Test
     public void testFrameworkInfoEvolve() {
@@ -66,5 +69,21 @@ public class EvolverDevolverTest {
 
         assertEquals(principal, entity.getPrincipal());
         assertEquals(secret, entity.getSecret());
+    }
+
+    @Test
+    public void testMasterInfoDevolve() {
+        final Protos.MasterInfo.Builder builder = Protos.MasterInfo.newBuilder()
+                .setId(id)
+                .setIp(ip)
+                .setPort(port)
+                .setHostname(hostname);
+
+        org.apache.mesos.Protos.MasterInfo entity = EvolverDevolver.devolve(builder.buildPartial());
+
+        assertEquals(id, entity.getId());
+        assertEquals(ip, entity.getIp());
+        assertEquals(port, entity.getPort());
+        assertEquals(hostname, entity.getHostname());
     }
 }
