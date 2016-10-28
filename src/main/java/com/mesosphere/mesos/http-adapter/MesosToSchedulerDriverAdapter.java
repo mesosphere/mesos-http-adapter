@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.OptionalLong;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -47,6 +48,8 @@ public class MesosToSchedulerDriverAdapter implements
     private static final int SEED_BACKOFF_MS = 2000;
     private static final int MAX_BACKOFF_MS = 30000;
 
+    // Latch for supporting `join()`.
+    private CountDownLatch latch = new CountDownLatch(1);
     private org.apache.mesos.Scheduler wrappedScheduler;
     private org.apache.mesos.v1.Protos.FrameworkInfo frameworkInfo;
     private final String master;
@@ -377,6 +380,9 @@ public class MesosToSchedulerDriverAdapter implements
 
         // This should ensure that the underlying native implementation is eventually GC'ed.
         this.mesos = null;
+
+        this.latch.countDown();
+
         return status = org.apache.mesos.Protos.Status.DRIVER_STOPPED;
     }
 
@@ -394,17 +400,29 @@ public class MesosToSchedulerDriverAdapter implements
         // This should ensure that the underlying native implementation is eventually GC'ed.
         this.mesos = null;
 
+        this.latch.countDown();
+
         return status = org.apache.mesos.Protos.Status.DRIVER_ABORTED;
     }
 
     @Override
-    public synchronized org.apache.mesos.Protos.Status join() {
-        throw new UnsupportedOperationException();
+    public org.apache.mesos.Protos.Status join() {
+        // Wait for `stop()` or `abort()` to trigger the latch.
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        synchronized (this) {
+            return status;
+        }
     }
 
     @Override
-    public synchronized org.apache.mesos.Protos.Status run() {
-        throw new UnsupportedOperationException();
+    public org.apache.mesos.Protos.Status run() {
+        org.apache.mesos.Protos.Status status = start();
+        return status != org.apache.mesos.Protos.Status.DRIVER_RUNNING ? status : join();
     }
 
     @Override
