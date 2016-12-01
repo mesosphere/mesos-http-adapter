@@ -81,7 +81,7 @@ ext {
   findbugsAnnotateVer = "1.3.2-201002241900"
   jacksonVer = "2.6.3"
   junitVer = "4.11"
-  mesosVer = "1.1.0-SNAPSHOT"
+  mesosVer = "1.1.0"
   slf4jVer = "1.7.10"
   protobufFormatVer = "1.4"
   protobufJava = "2.6.1"
