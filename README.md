@@ -15,7 +15,7 @@ To add `mesos-http-adapter` as a dependency on your project add following to you
 <dependency>
   <groupId>com.mesosphere</groupId>
   <artifactId>mesos-http-adapter</artifactId>
-  <version>0.2.0</version>
+  <version>0.3.0</version>
 </dependency>
 ```
 
@@ -24,7 +24,7 @@ To add `mesos-http-adapter` as a dependency on your project add following to you
 To add `mesos-http-adapter` as a dependency on your project add following to your `build.gradle`:
 
 ```
-compile "com.mesosphere:mesos-http-adaptor:0.2.0"
+compile "com.mesosphere:mesos-http-adaptor:0.3.0"
 ```
 
 ### Source code
