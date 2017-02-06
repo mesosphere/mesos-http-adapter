@@ -194,9 +194,11 @@ public class MesosToSchedulerDriverAdapter implements
                     wrappedScheduler.registered(
                             this,
                             EvolverDevolver.devolve(frameworkInfo.getId()),
-                            null /* MasterInfo */);
+                            EvolverDevolver.devolve(v1Event.getSubscribed().getMasterInfo()));
                 } else {
-                    wrappedScheduler.reregistered(this, null /* MasterInfo */);
+                    wrappedScheduler.reregistered(
+                            this,
+                            EvolverDevolver.devolve(v1Event.getSubscribed().getMasterInfo()));
                 }
 
                 initHeartbeatTimer(event.getSubscribed().getHeartbeatIntervalSeconds());

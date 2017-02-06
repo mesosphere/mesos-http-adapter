@@ -48,6 +48,11 @@ public class EvolverDevolver {
         return transform(frameworkId, org.apache.mesos.Protos.FrameworkID.newBuilder());
     }
 
+    public static Protos.MasterInfo devolve(
+            org.apache.mesos.v1.Protos.MasterInfo masterInfo) {
+        return transform(masterInfo, Protos.MasterInfo.newBuilder());
+    }
+
     public static org.apache.mesos.scheduler.Protos.Event devolve(org.apache.mesos.v1.scheduler.Protos.Event event) {
         return transform(event, org.apache.mesos.scheduler.Protos.Event.newBuilder());
     }
