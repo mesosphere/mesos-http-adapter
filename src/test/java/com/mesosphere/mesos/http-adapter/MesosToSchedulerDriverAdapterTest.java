@@ -344,6 +344,10 @@ public class MesosToSchedulerDriverAdapterTest {
                         driver.received(mesos, subscribedEvent);
 
                         driver.disconnected(mesos);
+
+                        // Ensure that any subsequent subscription retries do not result in an
+                        // additional invocation of `send()` once disconnected.
+                        callback.run();
                         return null;
                     }
                     return null;

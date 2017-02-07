@@ -109,7 +109,6 @@ public class MesosToSchedulerDriverAdapter implements
 
     private synchronized void subscribe(ExponentialBackOff backOff) throws IOException {
         if (state == State.SUBSCRIBED || state == State.DISCONNECTED) {
-            LOGGER.debug("Cancelling subscriber. As we are in state: {}", state);
             cancelSubscriber();
             return;
         }
@@ -142,7 +141,7 @@ public class MesosToSchedulerDriverAdapter implements
     private synchronized void performReliableSubscription() {
         // If timer is not running, initialize it.
         if (subscriberTimer == null) {
-            LOGGER.info("Initializing reliable subscriber...");
+            LOGGER.info("Initializing reliable subscriber");
             subscriberTimer = createTimerInternal();
             ExponentialBackOff backOff = new ExponentialBackOff.Builder()
                     .setMaxElapsedTimeMillis(Integer.MAX_VALUE /* Try forever */)
@@ -355,12 +354,13 @@ public class MesosToSchedulerDriverAdapter implements
     }
 
     private synchronized void cancelHeartbeatTimer() {
+        if (heartbeatTimer == null) {
+            return;
+        }
+
         LOGGER.info("Cancelling heartbeat timer upon disconnection");
 
-        // Cancel previous heartbeat timer if one exists.
-        if (heartbeatTimer != null) {
-            heartbeatTimer.shutdownNow();
-        }
+        heartbeatTimer.shutdownNow();
 
         heartbeatTimer = null;
         heartbeatTimeout = null;
@@ -720,8 +720,14 @@ public class MesosToSchedulerDriverAdapter implements
     }
 
     private synchronized void cancelSubscriber() {
-        LOGGER.info("Cancelling subscriber...");
+        if (subscriberTimer == null) {
+            return;
+        }
+
+        LOGGER.info("Cancelling subscriber");
+
         subscriberTimer.shutdownNow();
+
         subscriberTimer = null;
     }
 
