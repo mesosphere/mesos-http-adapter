@@ -273,6 +273,10 @@ public class MesosToSchedulerDriverAdapter implements
 
             case ERROR: {
                 wrappedScheduler.error(this, event.getError().getMessage());
+
+                // Abort the adapter once the error callback is invoked similar to
+                // the native scheduler driver.
+                abort();
                 break;
             }
 

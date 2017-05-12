@@ -724,6 +724,25 @@ public class MesosToSchedulerDriverAdapterTest {
         assertEquals(Protos.Call.Type.RECONCILE, callCaptor.getValue().getType());
     }
 
+    @Test
+    public void testAbortOnError() {
+        Scheduler scheduler = mock(Scheduler.class);
+        Mesos mesos = mock(Mesos.class);
+
+        CustomMesosToSchedulerDriverAdapter driver = new CustomMesosToSchedulerDriverAdapter(scheduler, mesos);
+        assertEquals(org.apache.mesos.Protos.Status.DRIVER_RUNNING, driver.start());
+
+        Protos.Event errorEvent = org.apache.mesos.v1.scheduler.Protos.Event.newBuilder()
+                .setType(Protos.Event.Type.ERROR)
+                .setError(org.apache.mesos.v1.scheduler.Protos.Event.Error.newBuilder()
+                        .setMessage("Framework has been removed")).build();
+
+        driver.received(mesos, errorEvent);
+
+        verify(scheduler, times(1)).error(any(), any());
+        assertEquals(org.apache.mesos.Protos.Status.DRIVER_ABORTED, driver.join());
+    }
+
     private static class CustomMesosToSchedulerDriverAdapter extends MesosToSchedulerDriverAdapter {
         private final Mesos mesos;
         private final ScheduledExecutorService timer;
