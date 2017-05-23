@@ -1,0 +1,29 @@
+org.gradle.daemon=true
+
+POM_NAME=mesos-http-adapter
+POM_ARTIFACT_ID=mesos-http-adapter
+POM_PACKAGING=jar
+VERSION_NAME=0.3.0
+VERSION_CODE=1
+GROUP=com.mesosphere
+
+POM_DESCRIPTION=Mesos HTTP API Adapter
+POM_URL=https://github.com/mesosphere/mesos-http-adapter
+POM_SCM_URL=https://github.com/mesosphere/mesos-http-adapter
+POM_SCM_CONNECTION=scm:git@github.com:mesosphere/mesos-http-adapter.git
+POM_SCM_DEV_CONNECTION=scm:git@github.com:mesosphere/mesos-http-adapter.git
+POM_LICENCE_NAME=Apache License Version 2.0
+POM_LICENCE_URL=https://github.com/mesosphere/mesos-http-adapter/blob/master/LICENSE
+POM_LICENCE_DIST=repo
+POM_DEVELOPER_ID=Mesosphere
+POM_DEVELOPER_NAME=Mesosphere
+
+NEXUS_USERNAME=
+NEXUS_PASSWORD=
+
+SNAPSHOT_REPOSITORY_URL=https://oss.sonatype.org/content/repositories/snapshots
+RELEASE_REPOSITORY_URL=https://oss.sonatype.org/service/local/staging/deploy/maven2
+
+signing.keyId=
+signing.password=
+signing.secretKeyRingFile=
