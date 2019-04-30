@@ -1,7 +1,7 @@
 // Config shared by the dcos-commons library and the examples:
 
 plugins {
-  id 'com.github.ksoichiro.console.reporter' version '0.4.0'
+  id 'com.github.ksoichiro.console.reporter' version '0.6.2'
 }
 
 allprojects {
@@ -32,10 +32,6 @@ allprojects {
 
   [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
-  task wrapper(type: Wrapper) {
-    gradleVersion = '2.3'
-  }
-
   idea {
     if (project.hasProperty('ideaParentDefined')) {
       project {
@@ -59,18 +55,13 @@ allprojects {
     }
   }
 
-  // Include unit test report in 'check'
-  // (jacoco itself depends on 'test')
-  check.dependsOn jacocoTestReport
+  check.finalizedBy jacocoTestReport
   jacocoTestReport {
-    afterEvaluate {
-      classDirectories = files(classDirectories.files.collect {
-        fileTree(dir: it, exclude: 'org/apache/mesos/testing/**')
-      })
-    }
-    reports {
-      html.destination "${buildDir}/jacoco"
-    }
+      reports {
+          xml.enabled false
+          csv.enabled false
+          html.destination file("${buildDir}/jacocoHtml")
+      }
   }
 }
 
@@ -81,14 +72,18 @@ ext {
   findbugsAnnotateVer = "1.3.2-201002241900"
   jacksonVer = "2.6.3"
   junitVer = "4.11"
-  mesosVer = "1.1.0"
+  mesosVer = "1.7.2"
   slf4jVer = "1.7.10"
   protobufFormatVer = "1.4"
-  protobufJava = "2.6.1"
+  protobufJava = "3.7.1"
 }
 
 group = "com.mesosphere"
-version = "0.4.1"
+version = "0.4.2"
+
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+compileJava.options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation' << '-proc:none'
+compileTestJava.options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation' << '-proc:none'
 
 task sourceJar(type: Jar) {
   from sourceSets.main.allJava
@@ -98,9 +93,9 @@ publishing {
   repositories {
     maven {
       if(project.version.endsWith('-SNAPSHOT')) {
-        url "s3://downloads.mesosphere.io/maven-snapshot/"
+        url "s3://downloads.mesosphere.com/maven-snapshot/"
       } else {
-        url "s3://downloads.mesosphere.io/maven/"
+        url "s3://downloads.mesosphere.com/maven/"
       }
       credentials(AwsCredentials) {
         accessKey System.env['AWS_ACCESS_KEY_ID']
@@ -140,5 +135,3 @@ distributions {
     baseName = 'mesos-http-adapter'
   }
 }
-
-apply from: 'publish.gradle'
